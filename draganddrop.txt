@@ -1,0 +1,82 @@
+jsx
+import React from 'react';
+
+const DraggableItem = ({ id, text }) => {
+  const handleDragStart = (event) => {
+    event.dataTransfer.setData('text/plain', id);
+  };
+
+  return (
+    <div
+      draggable
+      onDragStart={handleDragStart}
+      style={{ cursor: 'move' }}
+    >
+      {text}
+    </div>
+  );
+};
+
+export default DraggableItem;
+2. **DroppableArea Component:**
+
+jsx
+import React, { useState } from 'react';
+
+const DroppableArea = () => {
+  const [droppedItems, setDroppedItems] = useState([]);
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const itemId = event.dataTransfer.getData('text/plain');
+    const droppedItem = {
+      id: itemId,
+      text: `Item ${itemId}`,
+    };
+    setDroppedItems((prevItems) => [...prevItems, droppedItem]);
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  return (
+    <div
+      onDrop={handleDrop}
+      onDragOver={handleDragOver}
+      style={{
+        width: '300px',
+        height: '300px',
+        border: '1px solid #ccc',
+        padding: '10px',
+      }}
+    >
+      <h2>Droppable Area</h2>
+      {droppedItems.map((item) => (
+        <div key={item.id}>{item.text}</div>
+      ))}
+    </div>
+  );
+};
+
+export default DroppableArea;
+3. **App Component:**
+
+jsx
+import React from 'react';
+import DraggableItem from './DraggableItem';
+import DroppableArea from './DroppableArea';
+
+const App = () => {
+  return (
+    <div>
+      <h1>Drag and Drop Example</h1>
+      <DraggableItem id="1" text="Item 1" />
+      <DraggableItem id="2" text="Item 2" />
+      <DraggableItem id="3" text="Item 3" />
+      <DroppableArea />
+    </div>
+  );
+};
+
+export default App;
